@@ -25,8 +25,7 @@ public class BoardController {
     }
 
     @GetMapping("/update")
-    public String update(@RequestParam("id") Long id, Model model) {
-        model.addAttribute("id", id);
+    public String update() {
         return "board-update";
     }
 }

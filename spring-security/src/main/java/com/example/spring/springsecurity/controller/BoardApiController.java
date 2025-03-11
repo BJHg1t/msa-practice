@@ -67,10 +67,4 @@ public class BoardApiController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename*=UTF-8''" + encoded)
                 .body(resource);
     }
-
-    @GetMapping("/update/{id}")
-    public BoardDetailResponseDTO getBoardUpdate(@PathVariable Long id) {
-        return boardService.getBoardDetail(id)
-                .toBoardDetailResponseDTO();
-    }
 }
