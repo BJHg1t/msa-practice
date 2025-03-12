@@ -46,4 +46,15 @@ public class FileService {
             throw new RuntimeException(e);
         }
     }
+
+    public void deleteFile(String filePath) {
+        try {
+            if(!filePath.trim().isEmpty()) {
+                Path path = Paths.get(filePath);
+                Files.deleteIfExists(path); // 파일이 존재하면 삭제
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.spring.springsecurity.controller;
 
+import com.example.spring.springsecurity.dto.BoardDeleteRequestDTO;
 import com.example.spring.springsecurity.dto.BoardDetailResponseDTO;
 import com.example.spring.springsecurity.dto.list.Articles;
 import com.example.spring.springsecurity.dto.list.BoardListResponseDTO;
@@ -34,6 +35,7 @@ public class BoardApiController {
         boardService.saveArticle(userId, title, content, file);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping
     public BoardListResponseDTO getBoards(
             @RequestParam(name = "page", defaultValue = "1") int page,
@@ -55,7 +57,6 @@ public class BoardApiController {
                 .toBoardDetailResponseDTO();
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/file/download/{fileName}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName) {
         Resource resource = boardService.downloadFile(fileName);
@@ -66,5 +67,23 @@ public class BoardApiController {
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename*=UTF-8''" + encoded)
                 .body(resource);
+    }
+
+    @PutMapping
+    public void updateArticle(
+            @RequestParam("title") String title,
+            @RequestParam("content") String content,
+            @RequestParam("hiddenUserId") String userId,
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("hiddenId") Long id,
+            @RequestParam("hiddenFileFlag") boolean fileChanged,
+            @RequestParam("hiddenFilePath") String filePath
+    ) {
+        boardService.updateArticle(id, title, content, file, fileChanged ,filePath);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteArticle(@PathVariable Long id, @RequestBody BoardDeleteRequestDTO requestDTO) {
+        boardService.deleteBoardById(id, requestDTO);
     }
 }

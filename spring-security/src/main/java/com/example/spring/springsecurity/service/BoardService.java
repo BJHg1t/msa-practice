@@ -1,5 +1,6 @@
 package com.example.spring.springsecurity.service;
 
+import com.example.spring.springsecurity.dto.BoardDeleteRequestDTO;
 import com.example.spring.springsecurity.dto.list.Articles;
 import com.example.spring.springsecurity.mapper.BoardMapper;
 import com.example.spring.springsecurity.model.Article;
@@ -56,5 +57,33 @@ public class BoardService {
 
     public Resource downloadFile(String fileName) {
         return fileService.downloadFile(fileName);
+    }
+
+    public void updateArticle(Long id, String title, String content, MultipartFile file, boolean fileChanged, String filePath) {
+        String path = null;
+
+        if (!file.isEmpty()) {
+            path = fileService.fileUpload(file);
+        }
+
+        if (fileChanged) {
+            fileService.deleteFile(filePath);
+        } else {
+            path = filePath;
+        }
+
+        boardMapper.updateArticle(
+                Article.builder()
+                        .id(id)
+                        .title(title)
+                        .content(content)
+                        .filePath(path)
+                        .build()
+        );
+    }
+
+    public void deleteBoardById(Long id, BoardDeleteRequestDTO requestDTO) {
+        fileService.deleteFile(requestDTO.getFilePath());
+        boardMapper.deleteBoardById(id);
     }
 }

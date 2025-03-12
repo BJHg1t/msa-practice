@@ -1,21 +1,25 @@
+let selectedFile = null;
+
 $(document).ready(() => {
     checkToken();
     setupAjax();
     getUserInfo().then((userInfo) => {
-        $('#hiddenUserId').val(userInfo.userId);
         $('#hiddenUserName').val(userInfo.userName);
+        $('#hiddenUserId').val(userInfo.userId);
         $('#userId').val(userInfo.userId);
-        loadBoardDetail(userInfo.userId);
     }).catch((error) => {
-        console.error('error : ', error)
+        console.error('Error get user info : ', error)
     });
+    loadBoardDetail();
 
+    $('#hiddenFileFlag').val(false);
     $('#file').on('change', (event) => {
         selectedFile = event.target.files[0];
+        $('#hiddenFileFlag').val(true);
         updateFileList();
     });
 
-    $('#submitBtn').click((event) => {
+    $('#submitBtn').on('click', (event) => {
         event.preventDefault();
 
         let formData = new FormData($('#writeForm')[0]);
@@ -26,7 +30,7 @@ $(document).ready(() => {
             data: formData,
             contentType: false,
             processData: false,
-            success: (response) => {
+            success: () => {
                 alert('게시글이 성공적으로 수정되었습니다!');
                 window.location.href = '/'
             },
@@ -34,9 +38,31 @@ $(document).ready(() => {
                 console.log('오류발생 : ', error);
                 alert('게시글 수정 중 오류가 발생했습니다.');
             }
-        })
+        });
+
     });
-})
+
+});
+
+// 파일 목록 업데이트 함수 (파일 하나만)
+let updateFileList = () => {
+    $('#fileList').empty(); // 기존 목록 비우기
+
+    if (selectedFile) {
+        $('#fileList').append(`
+                    <li>
+                        ${selectedFile.name} <button type="button" class="remove-btn">X</button>
+                    </li>
+                `);
+
+        // X 버튼 클릭 시 파일 제거
+        $('.remove-btn').on('click', function() {
+            selectedFile = null; // 선택된 파일 제거
+            $('#file').val(''); // 파일 input 초기화
+            updateFileList(); // 파일 목록 갱신
+        });
+    }
+}
 
 let loadBoardDetail = () => {
     let hId = $('#hiddenId').val();
@@ -51,93 +77,27 @@ let loadBoardDetail = () => {
 
             if (response.filePath && response.filePath.length > 0) {
                 let filePath = response.filePath;
-                $('#hiddenFilePath').val(filePath);
-                let fileName = filePath.substring(filePath.lastIndexOf('\\') + 1);
-
-                let fileElement =
-                    `<li>
-                        ${selectedFile.name} <button type="button" class="remove-btn">X</button>
-                    </li>`
+                $('#hiddenFilePath').val(filePath)
+                let fileName = filePath.substring(filePath.lastIndexOf('\\') + 1); // 파일명 추출
+                let fileElement = `
+                    <li>
+                        ${fileName} <button type="button" class="remove-btn">X</button>
+                    </li>`;
                 $('#fileList').append(fileElement);
+
+                // X 버튼 클릭 시 파일 제거
+                $('.remove-btn').on('click', function() {
+                    selectedFile = null; // 선택된 파일 제거
+                    $('#file').val(''); // 파일 input 초기화
+                    updateFileList(); // 파일 목록 갱신
+                });
+            } else {
+                $('#fileList').append('<li>첨부된 파일이 없습니다.</li>')
             }
+
         },
         error: (error) => {
-            console.error('board detail error :: ', error)
-        }
-    })
-
-let updateFileList = () => {
-    $('#fileList').empty();
-
-    if (selectedFile) {
-        $('#fileList').append(
-            `<li>
-                ${selectedFile.name} <button type="button" class="remove-btn">X</button>
-            </li>`
-        );
-
-        $('.remove-btn').click(() => {
-            selectedFile = null;
-            $('#file').val('')
-            updateFileList();
-        });
-    }
-}
-
-let checkToken = () => {
-    let token = localStorage.getItem('accessToken');
-    if (token == null || token.trim() === '') {
-        window.location.href = '/member/login'
-    }
-}
-
-let setupAjax = () => {
-    $.ajaxSetup({
-        beforeSend: (xhr) => {
-            let token = localStorage.getItem('accessToken');
-            if (token) {
-                xhr.setRequestHeader('Authorization', 'Bearer ' + token)
-            }
-        }
-    })
-}
-
-let getUserInfo = () => {
-    return new Promise((resolve, reject) => {
-        $.ajax({
-            type: 'GET',
-            url: '/user/info',
-            success: (response) => {
-                resolve(response);
-            },
-            error: (xhr) => {
-                console.log('xhr : ', xhr);
-                if (xhr.status === 401) {
-                    handleTokenExpiration();
-                } else {
-                    reject(xhr);
-                }
-            }
-        })
-    })
-}
-
-let handleTokenExpiration = () => {
-    $.ajax({
-        type: 'POST',
-        url: '/refresh-token',
-        contentType: 'application/json; charset=utf-8',
-        dataType: 'json',
-        xhrFields: {
-            withCredentials: true
-        },
-        success: (response) => {
-            console.log('new access :: ', response);
-            localStorage.setItem("accessToken", response.token)
-        },
-        error: () => {
-            alert('로그인이 필요합니다. 다시 로그인해주세요.');
-            window.location.href = '/member/login'
+            console.error('board list error :: ', error);
         }
     });
 }

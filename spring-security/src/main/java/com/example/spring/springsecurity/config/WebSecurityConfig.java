@@ -54,7 +54,7 @@ public class WebSecurityConfig {
                                         new AntPathRequestMatcher("/write", GET.name()),
                                         new AntPathRequestMatcher("/detail", GET.name()),
                                         new AntPathRequestMatcher("/access-denied", GET.name()),
-                                        new AntPathRequestMatcher("/update", GET.name()),
+                                        new AntPathRequestMatcher("/update/*", GET.name()),
                                         new AntPathRequestMatcher("/join", POST.name()),
                                         new AntPathRequestMatcher("/login", POST.name()),
                                         new AntPathRequestMatcher("/logout", POST.name()),
