@@ -1,6 +1,6 @@
 package com.example.spring.springsecurity.service;
 
-import com.example.spring.springsecurity.dto.BoardDeleteRequestDTO;
+import com.example.spring.springsecurity.dto.BoardDeleteRequest;
 import com.example.spring.springsecurity.dto.list.Articles;
 import com.example.spring.springsecurity.mapper.BoardMapper;
 import com.example.spring.springsecurity.model.Article;
@@ -82,7 +82,7 @@ public class BoardService {
         );
     }
 
-    public void deleteBoardById(Long id, BoardDeleteRequestDTO requestDTO) {
+    public void deleteBoardById(Long id, BoardDeleteRequest requestDTO) {
         fileService.deleteFile(requestDTO.getFilePath());
         boardMapper.deleteBoardById(id);
     }

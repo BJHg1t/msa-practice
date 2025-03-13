@@ -1,5 +1,6 @@
 package com.example.spring.springsecurity.config;
 
+import com.example.spring.springsecurity.service.CustomOAuth2UserService;
 import com.example.spring.springsecurity.config.filter.TokenAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -8,6 +9,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -24,9 +26,11 @@ import static org.springframework.http.HttpMethod.POST;
 @Configuration
 @RequiredArgsConstructor
 @EnableMethodSecurity(prePostEnabled = true)
+@EnableWebSecurity
 public class WebSecurityConfig {
 
     private final TokenAuthenticationFilter tokenAuthenticationFilter;
+    private final CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
@@ -57,6 +61,7 @@ public class WebSecurityConfig {
                                         new AntPathRequestMatcher("/update/*", GET.name()),
                                         new AntPathRequestMatcher("/join", POST.name()),
                                         new AntPathRequestMatcher("/login", POST.name()),
+                                        new AntPathRequestMatcher("/google", POST.name()),
                                         new AntPathRequestMatcher("/logout", POST.name()),
                                         new AntPathRequestMatcher("/refresh-token", POST.name()),
                                         new AntPathRequestMatcher("/api/board/file/download/*", GET.name())
@@ -70,7 +75,18 @@ public class WebSecurityConfig {
                 .exceptionHandling( exception -> exception
                         .authenticationEntryPoint(authenticationEntryPoint())
                         .accessDeniedHandler(accessDeniedHandler())
-                );
+                )
+                .headers(
+                        (headerConfig) -> headerConfig.frameOptions(
+                                frameOptionsConfig -> frameOptionsConfig.disable()
+                        )
+                )
+                .oauth2Login(
+                        (oauth) ->
+                                oauth.userInfoEndpoint(
+                                        (endpoint) -> endpoint.userService(customOAuth2UserService)
+                                )
+                );;
 
         return http.build();
     }

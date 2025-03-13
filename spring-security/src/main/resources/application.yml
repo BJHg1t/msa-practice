@@ -6,7 +6,19 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: 1234
-  #구글 로그인
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+
+            scope:
+              - email
+              - profile
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
 server:
   port: 1001
 mybatis:

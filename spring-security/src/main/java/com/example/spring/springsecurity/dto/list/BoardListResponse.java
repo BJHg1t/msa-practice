@@ -7,7 +7,7 @@ import java.util.List;
 
 @Getter
 @Builder
-public class BoardListResponseDTO {
+public class BoardListResponse {
     private List<Articles> articles;
     private boolean last;
 }

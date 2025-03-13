@@ -5,7 +5,7 @@ import lombok.ToString;
 
 @Getter
 @ToString
-public class SignInRequestDTO {
+public class SignInRequest {
     private String userId;
     private String password;
 }

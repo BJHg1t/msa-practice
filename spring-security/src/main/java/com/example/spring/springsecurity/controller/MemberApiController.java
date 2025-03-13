@@ -31,22 +31,22 @@ public class MemberApiController {
     private final TokenProvider tokenProvider;
 
     @PostMapping("/join")
-    public SignUpResponseDTO signUp(@RequestBody SignUpRequestDTO signUpRequestDTO) {
-        memberService.signup(signUpRequestDTO.toMember(bCryptPasswordEncoder));
-        return SignUpResponseDTO.builder()
+    public SignUpResponse signUp(@RequestBody SignUpRequest signUpRequest) {
+        memberService.signup(signUpRequest.toMember(bCryptPasswordEncoder));
+        return SignUpResponse.builder()
                 .successed(true)
                 .build();
     }
 
     @PostMapping("/login")
-    public SignInResponseDTO signIn(
-            @RequestBody SignInRequestDTO signInRequestDTO,
+    public SignInResponse signIn(
+            @RequestBody SignInRequest signInRequest,
             HttpServletResponse response
     ) {
         Authentication authenticate = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        signInRequestDTO.getUserId(),
-                        signInRequestDTO.getPassword()
+                        signInRequest.getUserId(),
+                        signInRequest.getPassword()
                 )
         );
 
@@ -59,7 +59,7 @@ public class MemberApiController {
 
         CookieUtil.addCookie(response, "refreshToken", refreshToken, 7*24*60*60);
 
-        return SignInResponseDTO.builder()
+        return SignInResponse.builder()
                 .isLoggedIn(true)
                 .userId(member.getUserId())
                 .username(member.getUserId())
@@ -73,9 +73,9 @@ public class MemberApiController {
     }
 
     @GetMapping("/user/info")
-    public UserInfoResponseDTO getUserInfo(HttpServletRequest request) {
+    public UserInfoResponse getUserInfo(HttpServletRequest request) {
         Member member = (Member) request.getAttribute("member");
-        return UserInfoResponseDTO.builder()
+        return UserInfoResponse.builder()
                 .id(member.getId())
                 .userName(member.getUserName())
                 .userId(member.getUserId())

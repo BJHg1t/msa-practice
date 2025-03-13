@@ -1,7 +1,7 @@
 package com.example.spring.springsecurity.service;
 
 import com.example.spring.springsecurity.config.jwt.TokenProvider;
-import com.example.spring.springsecurity.dto.TokenResponseDTO;
+import com.example.spring.springsecurity.dto.TokenResponse;
 import com.example.spring.springsecurity.model.Member;
 import com.example.spring.springsecurity.util.CookieUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,7 +18,7 @@ public class TokenService {
 
     private TokenProvider tokenProvider;
 
-    public TokenResponseDTO makeNewToken(HttpServletRequest request, HttpServletResponse response) {
+    public TokenResponse makeNewToken(HttpServletRequest request, HttpServletResponse response) {
         String refreshToken = CookieUtil.getCookieValue(request, "refreshToken");
 
         if (refreshToken != null && tokenProvider.validToken(refreshToken) == 1) {
@@ -31,7 +31,7 @@ public class TokenService {
 
             response.setHeader(HttpHeaders.AUTHORIZATION, newAccessToken);
 
-            return TokenResponseDTO.builder()
+            return TokenResponse.builder()
                     .token(newAccessToken)
                     .build();
         } else {

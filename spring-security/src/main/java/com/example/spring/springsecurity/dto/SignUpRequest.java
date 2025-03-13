@@ -8,7 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Getter
 @ToString
-public class SignUpRequestDTO {
+public class SignUpRequest {
     private String userId;
     private String password;
     private String userName;

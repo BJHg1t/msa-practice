@@ -1,9 +1,9 @@
 package com.example.spring.springsecurity.controller;
 
-import com.example.spring.springsecurity.dto.BoardDeleteRequestDTO;
-import com.example.spring.springsecurity.dto.BoardDetailResponseDTO;
+import com.example.spring.springsecurity.dto.BoardDeleteRequest;
+import com.example.spring.springsecurity.dto.BoardDetailResponse;
 import com.example.spring.springsecurity.dto.list.Articles;
-import com.example.spring.springsecurity.dto.list.BoardListResponseDTO;
+import com.example.spring.springsecurity.dto.list.BoardListResponse;
 import com.example.spring.springsecurity.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
@@ -37,7 +37,7 @@ public class BoardApiController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping
-    public BoardListResponseDTO getBoards(
+    public BoardListResponse getBoards(
             @RequestParam(name = "page", defaultValue = "1") int page,
             @RequestParam(name = "size", defaultValue = "10") int size
     ) {
@@ -45,14 +45,14 @@ public class BoardApiController {
         int totalArticleCnt = boardService.getTotalArticleCnt();
         boolean last = (page * size) >= totalArticleCnt;
 
-        return BoardListResponseDTO.builder()
+        return BoardListResponse.builder()
                 .articles(articles)
                 .last(last)
                 .build();
     }
 
     @GetMapping("/{id}")
-    public BoardDetailResponseDTO getBoardDetail(@PathVariable Long id) {
+    public BoardDetailResponse getBoardDetail(@PathVariable Long id) {
         return boardService.getBoardDetail(id)
                 .toBoardDetailResponseDTO();
     }
@@ -83,7 +83,7 @@ public class BoardApiController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteArticle(@PathVariable Long id, @RequestBody BoardDeleteRequestDTO requestDTO) {
+    public void deleteArticle(@PathVariable Long id, @RequestBody BoardDeleteRequest requestDTO) {
         boardService.deleteBoardById(id, requestDTO);
     }
 }

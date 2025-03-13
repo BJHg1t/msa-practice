@@ -27,6 +27,10 @@ $(document).ready(() => {
             }
         })
 
-    });
+    })
+
+    $('.google-login').click(() => {
+        window.location.href = '/oauth2/authorization/google';
+    })
 
 });

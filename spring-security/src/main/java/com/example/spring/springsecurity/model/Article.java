@@ -1,6 +1,6 @@
 package com.example.spring.springsecurity.model;
 
-import com.example.spring.springsecurity.dto.BoardDetailResponseDTO;
+import com.example.spring.springsecurity.dto.BoardDetailResponse;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -17,8 +17,8 @@ public class Article {
     private LocalDateTime created;
     private LocalDateTime updated;
 
-    public BoardDetailResponseDTO toBoardDetailResponseDTO() {
-        return BoardDetailResponseDTO.builder()
+    public BoardDetailResponse toBoardDetailResponseDTO() {
+        return BoardDetailResponse.builder()
                 .title(title)
                 .content(content)
                 .userId(userId)

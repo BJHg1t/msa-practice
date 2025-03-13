@@ -1,6 +1,6 @@
 package com.example.spring.springsecurity.controller;
 
-import com.example.spring.springsecurity.dto.TokenResponseDTO;
+import com.example.spring.springsecurity.dto.TokenResponse;
 import com.example.spring.springsecurity.service.TokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,7 +17,7 @@ public class TokenApiController {
 
     @PostMapping("/refresh-token")
     public ResponseEntity<?> refreshToken(HttpServletRequest request, HttpServletResponse response) {
-        TokenResponseDTO newToken = tokenService.makeNewToken(request, response);
+        TokenResponse newToken = tokenService.makeNewToken(request, response);
 
         return ResponseEntity.ok(newToken);
     }
