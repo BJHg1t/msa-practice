@@ -86,7 +86,7 @@ public class WebSecurityConfig {
                                 oauth.userInfoEndpoint(
                                         (endpoint) -> endpoint.userService(customOAuth2UserService)
                                 )
-                );;
+                );
 
         return http.build();
     }

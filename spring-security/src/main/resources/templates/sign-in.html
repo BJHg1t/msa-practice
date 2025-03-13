@@ -6,6 +6,7 @@
     <script src="https://code.jquery.com/jquery-3.7.1.js" crossorigin="anonymous"></script>
     <script th:src="@{/js/common.js}"></script>
     <script th:src="@{/js/signIn.js}"></script>
+    <script th:src="@{/js/google.js}"></script>
     <link th:href="@{/css/signIn.css}" rel="stylesheet">
     <title>로그인</title>
 </head>
@@ -26,6 +27,7 @@
 
         <input id="signin" type="submit" value="로그인">
         <a th:href="@{/oauth2/authorization/google}" class="google-login" role="button">Google Login</a>
+        <input class="google-token" type="button" value="구글 토큰 발급">
     </div>
 
     <div class="signup-link">
