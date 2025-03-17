@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://code.jquery.com/jquery-3.7.1.js" crossorigin="anonymous"></script>
+  <script th:src="@{/js/api.js}"></script>
+  <title>api</title>
+</head>
+<body>
+
+  <div class="form-group">
+    <label for="serviceKey">인증키</label>
+    <input type="text" id="serviceKey" required>
+  </div>
+  <div class="form-group">
+    <label for="pageNo">페이지번호</label>
+    <input type="text" id="pageNo" required>
+  </div>
+  <div class="form-group">
+    <label for="numOfRows">한 페이지 결과 수</label>
+    <input type="text" id="numOfRows" required>
+  </div>
+  <div class="form-group">
+    <label for="dataType">응답자료형식</label>
+    <input type="text" id="dataType" required>
+  </div>
+  <div class="form-group">
+    <label for="base_date">발표일자</label>
+    <input type="text" id="base_date" required>
+  </div>
+  <div class="form-group">
+    <label for="base_time">발표시각</label>
+    <input type="text" id="base_time" required>
+  </div>
+  <div class="form-group">
+    <label for="nx">예보지점 X 좌표</label>
+    <input type="text" id="nx" required>
+  </div>
+  <div class="form-group">
+    <label for="ny">예보지점 Y 좌표</label>
+    <input type="text" id="ny" required>
+  </div>
+
+  <button id="getWeather">날씨 조회</button>
+  <a href="/logout">로그아웃</a>
+
+  <div id="result"></div>
+</body>
+</html>
