@@ -1,0 +1,11 @@
+server:
+  port: 1003
+spring:
+  application:
+    name: member
+  r2dbc:
+    url: ${SPRING_R2DBC_URL:r2dbc:mysql://localhost:3308/member}
+    username: root
+    password: 1234
+polar:
+  info-uri: ${INFO_URL:http://localhost:1002}

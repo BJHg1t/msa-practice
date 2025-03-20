@@ -12,6 +12,19 @@ services:
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/info?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=UTF-8
   
+  member:
+    build:
+      context: c:\Users\hi-pc-999\Desktop\msa-practice\service\member
+      dockerfile: Dockerfile
+    depends_on:
+      - mysql
+    image: "member"
+    container_name: "member"
+    ports:
+      - 1003:1003
+    environment:
+      - SPRING_R2DBC_URL=r2dbc:mysql://mysql:3306/order
+
   mysql:
     image: "mysql:latest"
     container_name: "mysql"
