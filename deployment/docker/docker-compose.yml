@@ -1,0 +1,23 @@
+services:
+  info:
+    build:
+      context: c:\Users\hi-pc-999\Desktop\msa-practice\service\info
+      dockerfile: Dockerfile
+    depends_on:
+      - mysql
+    image: "info"
+    container_name: "info"
+    ports:
+      - 1002:1002
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/info?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=UTF-8
+  
+  mysql:
+    image: "mysql:latest"
+    container_name: "mysql"
+    ports:
+      - 3308:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=1234
+    volumes:
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql

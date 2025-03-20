@@ -1,0 +1,10 @@
+server:
+  port: 1002
+spring:
+  application:
+    name: info
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3308/info?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=UTF-8}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 1234
