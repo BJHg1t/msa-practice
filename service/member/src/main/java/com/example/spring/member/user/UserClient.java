@@ -16,6 +16,15 @@
         private static final String USERS_ROOT_API = "/users";
         private final WebClient webClient;
 
+        public Mono<User> createUser(User user) {
+            return webClient.post()
+                    .uri(USERS_ROOT_API)
+                    .bodyValue(user)
+                    .retrieve()
+                    .bodyToMono(User.class)
+                    .onErrorResume(Exception.class, exception -> Mono.empty());
+        }
+
         public Mono<User> getUserByIsbn(String isbn) {
             return webClient.get()
                     .uri(USERS_ROOT_API + "/" + isbn)
@@ -26,15 +35,6 @@
                     .retryWhen(
                             Retry.backoff(3, Duration.ofMillis(100))
                     )
-                    .onErrorResume(Exception.class, exception -> Mono.empty());
-        }
-
-        public Mono<User> createUser(User user) {
-            return webClient.post()
-                    .uri(USERS_ROOT_API)
-                    .bodyValue(user)
-                    .retrieve()
-                    .bodyToMono(User.class)
                     .onErrorResume(Exception.class, exception -> Mono.empty());
         }
 

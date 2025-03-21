@@ -23,7 +23,8 @@ services:
     ports:
       - 1003:1003
     environment:
-      - SPRING_R2DBC_URL=r2dbc:mysql://mysql:3306/order
+      - SPRING_R2DBC_URL=r2dbc:mysql://mysql:3306/member
+      - INFO_URL=http://info:1002
 
   mysql:
     image: "mysql:latest"

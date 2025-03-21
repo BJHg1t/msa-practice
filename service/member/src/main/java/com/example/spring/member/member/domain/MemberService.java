@@ -15,12 +15,12 @@ public class MemberService {
 
     public Mono<Member> createUser(User user) {
         return userClient.createUser(user)
-                .map(createUser -> buildSuccessedMember(createUser))
-                .defaultIfEmpty(buildfailedMember(user))
+                .map(createUser -> buildSuccessCreate(createUser))
+                .defaultIfEmpty(buildfailCreate(user))
                 .flatMap(memberRepository::save);
     }
 
-    private static Member buildSuccessedMember(User user) {
+    private static Member buildSuccessCreate(User user) {
         return Member.builder()
                 .status(MemberStatus.CREATED)
                 .success(true)
@@ -28,9 +28,30 @@ public class MemberService {
     }
 
     // 유저 정보가 없으면 거부된 Member 객체 생성
-    private static Member buildfailedMember(User user) {
+    private static Member buildfailCreate(User user) {
         return Member.builder()
                 .status(MemberStatus.CREATED)
+                .success(false)
+                .build();
+    }
+
+    public Mono<Member> findUserByIsbn(String isbn) {
+        return userClient.getUserByIsbn(isbn)
+                .map(user -> buildSuccessRead(user))
+                .defaultIfEmpty(buildfailRead(isbn))
+                .flatMap(memberRepository::save);
+    }
+
+    private static Member buildSuccessRead(User user) {
+        return Member.builder()
+                .status(MemberStatus.READ)
+                .success(true)
+                .build();
+    }
+
+    private static Member buildfailRead(String isbn) {
+        return Member.builder()
+                .status(MemberStatus.READ)
                 .success(false)
                 .build();
     }
